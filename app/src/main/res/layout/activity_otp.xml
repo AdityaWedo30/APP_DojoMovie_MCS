@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bacground_otp"
+        android:contentDescription="Background image"
+        android:alpha="0.9" />
+
+    <!-- Overlay -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="top|center_horizontal">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OTP"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"/>
+
+        <!-- OTP Label -->
+        <TextView
+            android:id="@+id/otpLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OTP input"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="24dp"/>
+
+        <!-- OTP Input -->
+        <EditText
+            android:id="@+id/otpInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter OTP"
+            android:inputType="number"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textColorHint="#888888" />
+
+        <!-- Instruction -->
+        <TextView
+            android:id="@+id/instructionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter the OTP code you got from the SMS you received."
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</RelativeLayout>

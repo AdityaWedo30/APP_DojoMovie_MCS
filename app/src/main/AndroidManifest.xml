@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,20 +20,14 @@
         android:theme="@style/Theme.Pra_Project"
         tools:targetApi="31">
 
-        <!-- MainActivity sebagai aktivitas utama -->
-        <activity
-            android:name=".MainActivity"
+
+
+        <activity android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- LoginActivity yang ditambahkan -->
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
         </activity>
 
         <!-- SignupActivity yang ditambahkan -->
