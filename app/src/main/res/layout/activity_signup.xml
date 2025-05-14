@@ -35,9 +35,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:background="@android:drawable/edit_text"
+            android:background="@drawable/edittext_background"
             android:hint="Phone Number"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:elevation="7dp"/>
 
         <!-- Input password -->
         <EditText
@@ -45,9 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:background="@android:drawable/edit_text"
+            android:background="@drawable/edittext_background"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:elevation="7dp"/>
 
         <!-- Input konfirmasi password -->
         <EditText
@@ -55,9 +63,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@android:drawable/edit_text"
+            android:background="@drawable/edittext_background"
             android:hint="Confirm Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:elevation="7dp"/>
 
 
         <Button
@@ -67,7 +79,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/c3"
             android:text="Register"
-            android:textColor="@android:color/white" />
+            android:textColor="#000000" />
 
 
     </LinearLayout>

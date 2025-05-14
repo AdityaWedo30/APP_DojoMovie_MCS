@@ -26,11 +26,11 @@
             android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:text="OTP"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="40dp"/>
+            android:textStyle="bold" />
 
         <!-- OTP Label -->
         <TextView
