@@ -2,13 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient_background"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <!-- Logo -->
+
+    <!-- Form Container -->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/dojomovie" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="24dp"
@@ -18,8 +31,13 @@
         android:elevation="6dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image">>
 
+        <!-- Title -->
         <TextView
             android:id="@+id/loginTitle"
             android:layout_width="wrap_content"
@@ -27,51 +45,52 @@
             android:layout_marginBottom="24dp"
             android:text="REGISTER"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#000000"/>
 
-        <!-- Input nomor telepon -->
+        <!-- Phone Number Input -->
         <EditText
             android:id="@+id/numberPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/edittext_background"
+            android:elevation="7dp"
             android:hint="Phone Number"
             android:inputType="phone"
             android:padding="12dp"
             android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:elevation="7dp"/>
+            android:textColorHint="#888888" />
 
-        <!-- Input password -->
+        <!-- Password Input -->
         <EditText
             android:id="@+id/passwordET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/edittext_background"
+            android:elevation="7dp"
             android:hint="Password"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:elevation="7dp"/>
+            android:textColorHint="#888888" />
 
-        <!-- Input konfirmasi password -->
+        <!-- Confirm Password Input -->
         <EditText
             android:id="@+id/confirmPasswordET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/edittext_background"
+            android:elevation="7dp"
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:elevation="7dp"/>
+            android:textColorHint="#888888" />
 
-
+        <!-- Register Button -->
         <Button
             android:id="@+id/registerButton"
             android:layout_width="match_parent"
@@ -80,7 +99,5 @@
             android:backgroundTint="@color/c3"
             android:text="Register"
             android:textColor="#000000" />
-
-
     </LinearLayout>
 </LinearLayout>

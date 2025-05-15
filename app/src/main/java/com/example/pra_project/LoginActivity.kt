@@ -9,14 +9,16 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.dojomovie.DatabaseHelper
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DatabaseHelper
-    private lateinit var password: EditText
-    private lateinit var number: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var phoneEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var registerTextView: TextView
+    private lateinit var rememberCheckBox: CheckBox  // Kalau ada di layout, kalau tidak bisa dihapus
 
     private var pendingPhoneNumber: String? = null
     private var pendingMessage: String? = null
@@ -27,34 +29,50 @@ class LoginActivity : AppCompatActivity() {
 
         dbHelper = DatabaseHelper(this)
 
-        password = findViewById(R.id.passwordET)
-        number = findViewById(R.id.numberPhone)
+        phoneEditText = findViewById(R.id.numberPhone)
+        passwordEditText = findViewById(R.id.passwordET)
         loginButton = findViewById(R.id.loginButton)
         registerTextView = findViewById(R.id.registerTextView)
+        rememberCheckBox = findViewById(R.id.rememberCheckBox) // kalau di layout ada
 
-        registerTextView.setOnClickListener {
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
+        // Klik tombol login
+        loginButton.setOnClickListener {
+            val phone = phoneEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+
+            if (phone.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Isi nomor dan password", Toast.LENGTH_SHORT).show()
+            } else {
+                val success = dbHelper.loginUser(phone, password)
+                if (success) {
+                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
+
+                    // Contoh kirim SMS saat login berhasil (boleh diubah sesuai kebutuhan)
+                    val message = "Login berhasil untuk nomor $phone"
+                    checkSendSMSPermission(phone, message)
+
+                    // Pindah ke halaman utama/home
+                    val intent = Intent(this, OtpActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Nomor atau password salah", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
-        loginButton.setOnClickListener {
-            val phone = number.text.toString()
-            val pass = password.text.toString()
-
-            if (phone.isNotEmpty() && pass.isNotEmpty()) {
-                // Contoh penggunaan sendSMS setelah login berhasil
-                val message = "Login berhasil ke PRA Project"
-                checkSendSMSPermission(phone, message)
-            } else {
-                Toast.makeText(this, "Nomor dan password tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
+        // Klik ke halaman registrasi/signup
+        registerTextView.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java) // sesuaikan nama activity-nya
+            startActivity(intent)
         }
     }
 
-    fun checkSendSMSPermission(phoneNumber: String, message: String) {
+    // Cek izin SMS
+    private fun checkSendSMSPermission(phoneNumber: String, message: String) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+            != PackageManager.PERMISSION_GRANTED) {
+
             pendingPhoneNumber = phoneNumber
             pendingMessage = message
 
@@ -68,12 +86,18 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun sendSMS(phoneNumber: String, message: String) {
-        val smsManager = SmsManager.getDefault()
-        smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-        Toast.makeText(this, "SMS terkirim ke $phoneNumber", Toast.LENGTH_SHORT).show()
+    // Kirim SMS
+    private fun sendSMS(phoneNumber: String, message: String) {
+        try {
+            val smsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+            Toast.makeText(this, "SMS terkirim ke $phoneNumber", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Gagal mengirim SMS: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
+    // Hasil request izin SMS
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -82,8 +106,7 @@ class LoginActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 100 && grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pendingPhoneNumber?.let { phone ->
                 pendingMessage?.let { msg ->
                     sendSMS(phone, msg)
