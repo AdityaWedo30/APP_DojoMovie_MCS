@@ -55,79 +55,85 @@
         android:textColor="#FFFFFF"
         android:padding="8dp" />
 
-    <GridLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_item_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
-        android:columnCount="3"
-        android:padding="8dp"
-        android:rowCount="2">
+        android:padding="8dp"/>
 
-        <!-- Ulangi blok ini 6x -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="228dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:background="@drawable/card_poster"
-            android:orientation="vertical"
-            android:padding="8dp">
+<!--    <GridLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:alignmentMode="alignMargins"-->
+<!--        android:columnCount="3"-->
+<!--        android:padding="8dp"-->
+<!--        android:rowCount="2">-->
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/captain" />
+<!--        &lt;!&ndash; Ulangi blok ini 6x &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="228dp"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:background="@drawable/card_poster"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Judul Film"
-                android:textColor="#000"
-                android:textStyle="bold" />
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/captain" />-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rp 50.000"
-                android:textColor="@color/white" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="4dp"-->
+<!--                android:text="Judul Film"-->
+<!--                android:textColor="#000"-->
+<!--                android:textStyle="bold" />-->
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="228dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:background="@drawable/card_poster"
-            android:orientation="vertical"
-            android:padding="8dp">
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Rp 50.000"-->
+<!--                android:textColor="@color/white" />-->
+<!--        </LinearLayout>-->
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="315dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/dead_pool" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="228dp"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:background="@drawable/card_poster"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Judul Film"
-                android:textColor="#000"
-                android:textStyle="bold" />
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="315dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/dead_pool" />-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rp 50.000"
-                android:textColor="@color/white" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="4dp"-->
+<!--                android:text="Judul Film"-->
+<!--                android:textColor="#000"-->
+<!--                android:textStyle="bold" />-->
 
-        <!-- Ulangi sesuai kebutuhan untuk total 6 item -->
-    </GridLayout>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Rp 50.000"-->
+<!--                android:textColor="@color/white" />-->
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash; Ulangi sesuai kebutuhan untuk total 6 item &ndash;&gt;-->
+<!--    </GridLayout>-->
 
 
 </LinearLayout>
