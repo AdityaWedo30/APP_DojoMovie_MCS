@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.pra_project"
-    compileSdk = 34
+    compileSdk = 35
 
 
     buildFeatures {
