@@ -48,11 +48,14 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
 
                     // Contoh kirim SMS saat login berhasil (boleh diubah sesuai kebutuhan)
-                    val message = "Login berhasil untuk nomor $phone"
+                    val otp = generateOTP()
+                    val message = "Kode OTP Anda adalah: $otp"
+                    // Simpan OTP ke database, SharedPreferences, atau kirim ke OTPActivity lewat Intent jika perlu
                     checkSendSMSPermission(phone, message)
 
                     // Pindah ke halaman utama/home
                     val intent = Intent(this, OtpActivity::class.java)
+                    intent.putExtra("OTP", otp)
                     startActivity(intent)
                     finish()
                 } else {
@@ -115,5 +118,12 @@ class LoginActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Izin untuk mengirim SMS ditolak", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun generateOTP(length: Int = 6): String {
+        val chars = ('0'..'9')
+        return (1..length)
+            .map { chars.random() }
+            .joinToString("")
     }
 }

@@ -63,5 +63,15 @@
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:layout_marginTop="16dp" />
+
+        <!-- Verify Button -->
+        <Button
+            android:id="@+id/verifyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verifikasi"
+            android:layout_marginTop="24dp"
+            android:textColor="#FFFFFF"
+            android:background="@android:drawable/btn_default" />
     </LinearLayout>
 </RelativeLayout>
