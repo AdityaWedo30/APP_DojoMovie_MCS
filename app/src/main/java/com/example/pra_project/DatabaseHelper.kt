@@ -23,6 +23,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_ID = "id"
         private const val COLUMN_PHONE = "phone"
         private const val COLUMN_PASSWORD = "password"
+
+        // Transaction table
+        private const val TABLE_TRANSACTION = "transactions"
+        private const val COLUMN_TRANSACTION_ID = "transaction_id"
+        private const val COLUMN_USER_ID = "user_id"
+        private const val COLUMN_FILM_TITLE = "film_title"
+        private const val COLUMN_FILM_PRICE = "film_price"
+        private const val COLUMN_QUANTITY = "quantity"
+        private const val COLUMN_TRANSACTION_DATE = "transaction_date"
     }
 
     // Fungsi ini dipanggil saat database pertama kali dibuat
@@ -118,5 +127,82 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return loggedIn
     }
+    // Function to add a new transaction
+    fun addTransaction(userId: Int, filmTitle: String, filmPrice: Int, quantity: Int): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_USER_ID, userId)
+            put(COLUMN_FILM_TITLE, filmTitle)
+            put(COLUMN_FILM_PRICE, filmPrice)
+            put(COLUMN_QUANTITY, quantity)
+        }
+
+        return try {
+            val result = db.insertOrThrow(TABLE_TRANSACTION, null, values)
+            result != -1L
+        } catch (e: Exception) {
+            Toast.makeText(ctx, "Failed to add transaction: ${e.message}", Toast.LENGTH_SHORT).show()
+            false
+        }
+    }
+
+    // Function to get user ID by phone number
+    fun getUserId(phone: String): Int? {
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_USER,
+            arrayOf(COLUMN_ID),
+            "$COLUMN_PHONE = ?",
+            arrayOf(phone),
+            null, null, null
+        )
+
+        return if (cursor.moveToFirst()) {
+            val userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+            cursor.close()
+            userId
+        } else {
+            cursor.close()
+            null
+        }
+    }
+
+    // Function to get all transactions for a specific user
+    fun getUserTransactions(userId: Int): List<Transaction> {
+        val transactions = mutableListOf<Transaction>()
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_TRANSACTION,
+            null,
+            "$COLUMN_USER_ID = ?",
+            arrayOf(userId.toString()),
+            null, null,
+            "$COLUMN_TRANSACTION_DATE DESC"
+        )
+
+        while (cursor.moveToNext()) {
+            val transaction = Transaction(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRANSACTION_ID)),
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                filmTitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FILM_TITLE)),
+                filmPrice = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FILM_PRICE)),
+                quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY)),
+                transactionDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSACTION_DATE))
+            )
+            transactions.add(transaction)
+        }
+        cursor.close()
+        return transactions
+    }
 
 }
+
+// Transaction data class
+data class Transaction(
+    val id: Int,
+    val userId: Int,
+    val filmTitle: String,
+    val filmPrice: Int,
+    val quantity: Int,
+    val transactionDate: String
+)
