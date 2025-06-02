@@ -33,7 +33,7 @@ class OtpActivity : AppCompatActivity() {
                 Toast.makeText(this, "Verifikasi OTP berhasil", Toast.LENGTH_SHORT).show()
 
                 // Pindah ke halaman utama (ganti dengan activity tujuanmu)
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
