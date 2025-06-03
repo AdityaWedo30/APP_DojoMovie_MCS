@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var phoneEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var registerTextView: TextView
-    private lateinit var rememberCheckBox: CheckBox  // Kalau ada di layout, kalau tidak bisa dihapus
+    private lateinit var rememberCheckBox: CheckBox // Jika tidak ada di layout, boleh dihapus
 
     private var pendingPhoneNumber: String? = null
     private var pendingMessage: String? = null
@@ -33,9 +33,8 @@ class LoginActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.passwordET)
         loginButton = findViewById(R.id.loginButton)
         registerTextView = findViewById(R.id.registerTextView)
-        rememberCheckBox = findViewById(R.id.rememberCheckBox) // kalau di layout ada
+        rememberCheckBox = findViewById(R.id.rememberCheckBox) // Jika tidak ada di layout, hapus baris ini
 
-        // Klik tombol login
         loginButton.setOnClickListener {
             val phone = phoneEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
@@ -47,13 +46,16 @@ class LoginActivity : AppCompatActivity() {
                 if (success) {
                     Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
 
-                    // Contoh kirim SMS saat login berhasil (boleh diubah sesuai kebutuhan)
+                    // Simpan nomor telepon ke SharedPreferences
+                    val sharedPref = getSharedPreferences("UserSession", MODE_PRIVATE)
+                    sharedPref.edit().putString("loggedInPhone", phone).apply()
+
+                    // Kirim OTP via SMS
                     val otp = generateOTP()
                     val message = "Kode OTP Anda adalah: $otp"
-                    // Simpan OTP ke database, SharedPreferences, atau kirim ke OTPActivity lewat Intent jika perlu
                     checkSendSMSPermission(phone, message)
 
-                    // Pindah ke halaman utama/home
+                    // Pindah ke halaman OTP
                     val intent = Intent(this, OtpActivity::class.java)
                     intent.putExtra("OTP", otp)
                     startActivity(intent)
@@ -64,18 +66,16 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Klik ke halaman registrasi/signup
         registerTextView.setOnClickListener {
-            val intent = Intent(this, SignupActivity::class.java) // sesuaikan nama activity-nya
+            val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
     }
 
-    // Cek izin SMS
     private fun checkSendSMSPermission(phoneNumber: String, message: String) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
-            != PackageManager.PERMISSION_GRANTED) {
-
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             pendingPhoneNumber = phoneNumber
             pendingMessage = message
 
@@ -89,7 +89,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Kirim SMS
     private fun sendSMS(phoneNumber: String, message: String) {
         try {
             val smsManager = SmsManager.getDefault()
@@ -100,7 +99,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Hasil request izin SMS
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -109,7 +107,8 @@ class LoginActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 100 && grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             pendingPhoneNumber?.let { phone ->
                 pendingMessage?.let { msg ->
                     sendSMS(phone, msg)

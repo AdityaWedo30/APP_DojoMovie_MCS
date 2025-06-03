@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="OTP"
+            android:text="OTP Request and Input"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="Verifikasi"
             android:layout_marginTop="24dp"
-            android:textColor="#FFFFFF"
-            android:background="@android:drawable/btn_default" />
+            android:textColor="@color/black"
+            android:backgroundTint="@color/c2" />
     </LinearLayout>
 </RelativeLayout>
