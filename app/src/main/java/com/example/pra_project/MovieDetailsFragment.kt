@@ -4,14 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.dojomovie.DatabaseHelper
@@ -29,26 +26,33 @@ class MovieDetailsFragment : Fragment() {
     private var moviePrice: Int = 0
     private var movieImage: String = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeViews(view)
+        setupDatabase()
+        loadMovieData()
+        setupListeners()
+    }
+
+    private fun initializeViews(view: View) {
         ivMovieCover = view.findViewById(R.id.ivMovieCover)
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle)
         tvMoviePrice = view.findViewById(R.id.tvMoviePrice)
         etQuantity = view.findViewById(R.id.etQuantity)
         tvTotalPrice = view.findViewById(R.id.tvTotalPrice)
         btnBuy = view.findViewById(R.id.btnBuy)
+    }
 
+    private fun setupDatabase() {
         dbHelper = DatabaseHelper(requireContext())
+    }
 
+    private fun loadMovieData() {
         arguments?.let {
             movieTitle = it.getString("MOVIE_TITLE", "")
             moviePrice = it.getInt("MOVIE_PRICE", 0)
@@ -56,23 +60,20 @@ class MovieDetailsFragment : Fragment() {
         }
 
         tvMovieTitle.text = movieTitle
-        tvMoviePrice.text = "Price: Rp ${moviePrice}"
-        Glide.with(this)
-            .load(movieImage)
-            .into(ivMovieCover)
+        tvMoviePrice.text = "Price: Rp $moviePrice"
+        Glide.with(this).load(movieImage).into(ivMovieCover)
+    }
 
-        // Add text change listener for quantity
+    private fun setupListeners() {
         etQuantity.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 updateTotalPrice()
             }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        btnBuy.setOnClickListener {
-            validateAndBuy()
-        }
+        btnBuy.setOnClickListener { validateAndBuy() }
     }
 
     private fun updateTotalPrice() {
@@ -97,20 +98,26 @@ class MovieDetailsFragment : Fragment() {
 
         val sharedPref = activity?.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val loggedInPhone = sharedPref?.getString("loggedInPhone", "")
-        val userId = loggedInPhone?.let { dbHelper.getUserId(it) }
 
+        if (loggedInPhone.isNullOrEmpty()) {
+            Toast.makeText(context, "Please login first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val userId = dbHelper.getUserId(loggedInPhone)
         if (userId == null) {
-            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "User not found in database", Toast.LENGTH_SHORT).show()
             return
         }
 
         val success = dbHelper.addTransaction(userId, movieTitle, moviePrice, quantity)
         if (success) {
-            Toast.makeText(context, "Transaction successful!", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(context, "Transaction successful! Movie purchased.", Toast.LENGTH_LONG).show()
+            etQuantity.setText("")
+            updateTotalPrice()
             activity?.supportFragmentManager?.popBackStack()
         } else {
-            Toast.makeText(context, "Failed to process transaction", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Failed to process transaction. Please try again.", Toast.LENGTH_SHORT).show()
         }
     }
 

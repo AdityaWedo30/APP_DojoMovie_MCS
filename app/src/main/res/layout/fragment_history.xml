@@ -25,13 +25,41 @@
             android:src="@drawable/fontlogo" />
     </LinearLayout>
 
+    <!-- Total Spent Display -->
+    <TextView
+        android:id="@+id/tvTotalSpent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Spent: Rp 0"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:background="#E8F5E8"
+        android:padding="16dp"
+        android:layout_margin="8dp"
+        android:gravity="center" />
+
     <!-- RecyclerView for history -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTransactions"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:padding="8dp" />
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:visibility="visible" />
+
+    <!-- Empty History Message -->
+    <TextView
+        android:id="@+id/tvEmptyHistory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="No transactions yet\n\nStart buying movie tickets to see your history here!"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone" />
 
 </LinearLayout>

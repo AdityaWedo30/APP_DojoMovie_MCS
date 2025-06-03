@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,34 +18,55 @@
             android:id="@+id/tvFilmTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Movie Title"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="#333"
+            android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/tvFilmPrice"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/darker_gray" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/tvFilmPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Price: Rp 50000"
+                android:textSize="14sp"
+                android:textColor="#666" />
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Qty: 2"
+                android:textSize="14sp"
+                android:textColor="#666" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvQuantity"
+            android:id="@+id/tvTotalPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:text="Total: Rp 100000"
             android:textSize="16sp"
-            android:textColor="@android:color/darker_gray" />
+            android:textStyle="bold"
+            android:textColor="#4CAF50"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvTransactionDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textStyle="italic"
-            android:textColor="@android:color/darker_gray" />
+            android:text="01 Jan 2024, 14:30"
+            android:textSize="12sp"
+            android:textColor="#999"
+            android:gravity="end" />
 
     </LinearLayout>
 

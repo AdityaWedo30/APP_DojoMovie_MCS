@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.*
 
 // Kelas DatabaseHelper digunakan untuk mengelola database SQLite pada aplikasi
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -36,6 +38,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     // Fungsi ini dipanggil saat database pertama kali dibuat
     override fun onCreate(db: SQLiteDatabase) {
+        // Create User table
         val createUserTable = """
             CREATE TABLE $TABLE_USER (
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,12 +46,28 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_PASSWORD TEXT UNIQUE
             )
         """.trimIndent()
+
+        // Create Transaction table
+        val createTransactionTable = """
+            CREATE TABLE $TABLE_TRANSACTION (
+                $COLUMN_TRANSACTION_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_USER_ID INTEGER,
+                $COLUMN_FILM_TITLE TEXT,
+                $COLUMN_FILM_PRICE INTEGER,
+                $COLUMN_QUANTITY INTEGER,
+                $COLUMN_TRANSACTION_DATE TEXT,
+                FOREIGN KEY($COLUMN_USER_ID) REFERENCES $TABLE_USER($COLUMN_ID)
+            )
+        """.trimIndent()
+
         db.execSQL(createUserTable) // Membuat tabel user
+        db.execSQL(createTransactionTable) // Membuat tabel transaction
     }
 
     // Fungsi ini dipanggil saat terjadi upgrade versi database
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USER") // Hapus tabel jika sudah ada
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_TRANSACTION") // Hapus tabel transaction terlebih dahulu
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_USER") // Hapus tabel user
         onCreate(db) // Buat ulang tabel
     }
 
@@ -127,21 +146,37 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return loggedIn
     }
+
     // Function to add a new transaction
     fun addTransaction(userId: Int, filmTitle: String, filmPrice: Int, quantity: Int): Boolean {
         val db = writableDatabase
+
+        // Get current date and time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDate = dateFormat.format(Date())
+
         val values = ContentValues().apply {
             put(COLUMN_USER_ID, userId)
             put(COLUMN_FILM_TITLE, filmTitle)
             put(COLUMN_FILM_PRICE, filmPrice)
             put(COLUMN_QUANTITY, quantity)
+            put(COLUMN_TRANSACTION_DATE, currentDate)
         }
 
         return try {
             val result = db.insertOrThrow(TABLE_TRANSACTION, null, values)
-            result != -1L
+            val success = result != -1L
+
+            if (success) {
+                android.util.Log.d("DatabaseHelper", "Transaction added: ID=$result")
+            } else {
+                android.util.Log.e("DatabaseHelper", "Failed to insert transaction")
+            }
+
+            success
         } catch (e: Exception) {
-            Toast.makeText(ctx, "Failed to add transaction: ${e.message}", Toast.LENGTH_SHORT).show()
+            android.util.Log.e("DatabaseHelper", "Exception adding transaction", e)
+            Toast.makeText(ctx, "Database error: ${e.message}", Toast.LENGTH_SHORT).show()
             false
         }
     }
@@ -195,6 +230,21 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return transactions
     }
 
+    // Function to get total spent by user
+    fun getTotalSpentByUser(userId: Int): Int {
+        val db = readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT SUM($COLUMN_FILM_PRICE * $COLUMN_QUANTITY) as total FROM $TABLE_TRANSACTION WHERE $COLUMN_USER_ID = ?",
+            arrayOf(userId.toString())
+        )
+
+        var total = 0
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0)
+        }
+        cursor.close()
+        return total
+    }
 }
 
 // Transaction data class
@@ -205,4 +255,8 @@ data class Transaction(
     val filmPrice: Int,
     val quantity: Int,
     val transactionDate: String
-)
+) {
+    fun getTotalPrice(): Int {
+        return filmPrice * quantity
+    }
+}
