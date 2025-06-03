@@ -38,6 +38,22 @@ class ItemAdapter(private val itemList: ArrayList<Item>) : RecyclerView.Adapter<
 
         holder.itemNameView.text = currentItem.itemName
         holder.itemPriceView.text = formatToRupiahNoDecimal(currentItem.itemPrice.toInt())
+
+        // Add click listener to the item view
+        holder.itemView.setOnClickListener {
+            val fragment = MovieDetailsFragment.newInstance(
+                currentItem.itemName,
+                currentItem.itemPrice,
+                currentItem.itemImage
+            )
+
+            // Get the activity and replace the fragment
+            val activity = holder.itemView.context as? MainActivity
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.frame_layout, fragment)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
     }
     fun formatToRupiahNoDecimal(number: Int): String {
         val localeID = Locale("in", "ID")

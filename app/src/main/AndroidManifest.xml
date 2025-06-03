@@ -27,7 +27,7 @@
             android:value="${MAPS_API_KEY}"/>
 
 <!--        kalo mau liat tampilan tanpa login langsung panggil di bawah ini aja-->
-        <activity android:name=".LoginActivity"
+        <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".OtpActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".HistoryActivity" />
 
 
