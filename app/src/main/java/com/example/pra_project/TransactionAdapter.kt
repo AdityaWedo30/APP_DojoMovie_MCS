@@ -5,11 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dojomovie.Transaction
 import java.text.NumberFormat
 import java.util.Locale
 
-class TransactionAdapter(private val transactions: List<Transaction>) :
+class TransactionAdapter(private val transactions: List<com.example.pra_project.Transaction>) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     class TransactionViewHolder(view: View) : RecyclerView.ViewHolder(view) {

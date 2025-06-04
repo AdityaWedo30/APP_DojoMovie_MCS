@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.example.dojomovie.DatabaseHelper
+import com.example.dojomovie.Film
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,6 +24,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var myMap: GoogleMap
     private lateinit var requestQueue: RequestQueue
     private lateinit var recyclerView: RecyclerView
+    private lateinit var dbHelper: DatabaseHelper
+    private var filmList = listOf<Film>()
+    private lateinit var filmAdapter: FilmAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,27 +44,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
         // Init RecyclerView
+        dbHelper = DatabaseHelper(requireContext())
         recyclerView = view.findViewById(R.id.rv_item_view)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        requestQueue = Volley.newRequestQueue(requireContext())
 
-        // Fetch data
-        val url = "https://api.npoint.io/a3c106cda8c706c8e96f"
-        val request = JsonObjectRequest(
-            Request.Method.GET, url, null, { response ->
-                try {
-                    val itemList = parseJSON(response)
-                    val adapter = ItemAdapter(itemList)
-                    recyclerView.adapter = adapter
-                    adapter.notifyDataSetChanged()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }, { error ->
-                Log.e("Volley error", error.toString())
-            }
-        )
-        requestQueue.add(request)
+        filmList = dbHelper.getAllFilms()
+        filmAdapter = FilmAdapter(filmList)
+        recyclerView.adapter = filmAdapter
+
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -73,20 +62,4 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dojoLocation, 12f))
     }
 
-    private fun parseJSON(jsonObject: JSONObject): ArrayList<Item> {
-        val itemList = ArrayList<Item>()
-        try {
-            val itemArray = jsonObject.getJSONArray("items")
-            for (i in 0 until itemArray.length()) {
-                val itemObject = itemArray.getJSONObject(i)
-                val itemImage = itemObject.getString("image")
-                val itemName = itemObject.getString("title")
-                val itemPrice = itemObject.getInt("price")
-                itemList.add(Item(itemImage, itemName, itemPrice))
-            }
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return itemList
-    }
 }

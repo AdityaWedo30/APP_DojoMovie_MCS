@@ -52,17 +52,38 @@ class MovieDetailsFragment : Fragment() {
         dbHelper = DatabaseHelper(requireContext())
     }
 
-    private fun loadMovieData() {
-        arguments?.let {
-            movieTitle = it.getString("MOVIE_TITLE", "")
-            moviePrice = it.getInt("MOVIE_PRICE", 0)
-            movieImage = it.getString("MOVIE_IMAGE", "")
-        }
+//    private fun loadMovieData() {
+//        arguments?.let {
+//            movieTitle = it.getString("MOVIE_TITLE", "")
+//            moviePrice = it.getInt("MOVIE_PRICE", 0)
+//            movieImage = it.getString("MOVIE_IMAGE", "")
+//        }
+//
+//        tvMovieTitle.text = movieTitle
+//        tvMoviePrice.text = "Price: Rp $moviePrice"
+//        Glide.with(this).load(movieImage).into(ivMovieCover)
+//    }
+        private fun loadMovieData() {
+            val filmId = arguments?.getString("FILM_ID") ?: return
 
-        tvMovieTitle.text = movieTitle
-        tvMoviePrice.text = "Price: Rp $moviePrice"
-        Glide.with(this).load(movieImage).into(ivMovieCover)
-    }
+            val film = dbHelper.getFilmById(filmId)
+            if (film != null) {
+                movieImage = film.image
+                movieTitle = film.title
+                moviePrice = film.price
+
+
+                Glide.with(this)
+                    .load(movieImage)
+                    .into(ivMovieCover)
+                tvMovieTitle.text = film.title
+                tvMoviePrice.text = "Price: Rp ${film.price}"
+
+
+            } else {
+                Toast.makeText(context, "Film not found", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     private fun setupListeners() {
         etQuantity.addTextChangedListener(object : TextWatcher {
@@ -83,6 +104,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun validateAndBuy() {
+        val filmId = arguments?.getString("FILM_ID") ?: return
         val quantityStr = etQuantity.text.toString()
 
         if (quantityStr.isEmpty()) {
@@ -110,7 +132,7 @@ class MovieDetailsFragment : Fragment() {
             return
         }
 
-        val success = dbHelper.addTransaction(userId, movieTitle, moviePrice, quantity)
+        val success = dbHelper.addTransaction(userId, filmId, quantity)
         if (success) {
             Toast.makeText(context, "Transaction successful! Movie purchased.", Toast.LENGTH_LONG).show()
             etQuantity.setText("")
@@ -122,14 +144,12 @@ class MovieDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(title: String, price: Int, image: String): MovieDetailsFragment {
-            return MovieDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString("MOVIE_TITLE", title)
-                    putInt("MOVIE_PRICE", price)
-                    putString("MOVIE_IMAGE", image)
-                }
-            }
+        fun newInstance(filmId: String): MovieDetailsFragment {
+            val fragment = MovieDetailsFragment()
+            val args = Bundle()
+            args.putString("FILM_ID", filmId)
+            fragment.arguments = args
+            return fragment
         }
     }
 }
