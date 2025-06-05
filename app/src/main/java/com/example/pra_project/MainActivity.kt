@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fetchAndStoreFilms(this)
+
         val dbHelper = DatabaseHelper(this)
 
         dbHelper.updateFilmImage("MV001", "https://www.hollywoodreporter.com/wp-content/uploads/2014/02/new_godzilla_poster.jpg")

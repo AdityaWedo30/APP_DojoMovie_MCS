@@ -1,5 +1,6 @@
 package com.example.pra_project
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 
-// TODO: Rename parameter arguments, choose names that match
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -20,7 +20,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -53,9 +53,9 @@ class ProfileFragment : Fragment() {
         // Tampilkan nomor HP user yang login
         displayUserPhone()
 
-        // Handle logout
+        // Handle logout dengan dialog konfirmasi
         logoutButton.setOnClickListener {
-            logout()
+            showLogoutConfirmationDialog()
         }
     }
 
@@ -71,6 +71,24 @@ class ProfileFragment : Fragment() {
             }
         } catch (e: Exception) {
             tvUsername.text = "Error loading user"
+        }
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        context?.let { ctx ->
+            AlertDialog.Builder(ctx)
+                .setTitle("Konfirmasi Logout")
+                .setMessage("Apakah Anda yakin ingin Logout dari akun ini?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Ya") { dialog, _ ->
+                    dialog.dismiss()
+                    logout()
+                }
+                .setNegativeButton("Batal") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setCancelable(false) // User harus memilih salah satu opsi
+                .show()
         }
     }
 

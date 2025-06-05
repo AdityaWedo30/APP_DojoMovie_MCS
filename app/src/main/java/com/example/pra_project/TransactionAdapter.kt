@@ -16,6 +16,7 @@ class TransactionAdapter(private val transactions: List<com.example.pra_project.
         val tvFilmPrice: TextView = view.findViewById(R.id.tvFilmPrice)
         val tvQuantity: TextView = view.findViewById(R.id.tvQuantity)
         val tvTransactionDate: TextView = view.findViewById(R.id.tvTransactionDate)
+        val tvTotalPrice: TextView = view.findViewById(R.id.tvTotalPrice)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -27,6 +28,9 @@ class TransactionAdapter(private val transactions: List<com.example.pra_project.
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
         val formatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+
+        val totalPrice = transaction.filmPrice * transaction.quantity
+        holder.tvTotalPrice.text = "Total: ${formatter.format(totalPrice)}"
 
         holder.tvFilmTitle.text = transaction.filmTitle
         holder.tvFilmPrice.text = "Price: ${formatter.format(transaction.filmPrice)}"

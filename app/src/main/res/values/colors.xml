@@ -7,4 +7,8 @@
     <color name="c3">#A3C735</color>
     <color name="c4">#166A52</color>
     <color name="c5">#092D29</color>
+    <!-- res/values/colors.xml -->
+    <color name="status_bar_light">#A2C900</color> <!-- Warna terang -->
+    <color name="status_bar_dark">#000000</color>   <!-- Warna gelap -->
+
 </resources>

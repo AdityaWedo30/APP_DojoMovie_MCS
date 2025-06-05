@@ -413,15 +413,12 @@ fun fetchAndStoreFilms(context: Context) {
             for (film in films) {
                 dbHelper.addFilm(film)
             }
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Berhasil menambahkan film dari API", Toast.LENGTH_SHORT).show()
-            }
+
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Gagal memuat data: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+
         }
     }
+
 }
 
 

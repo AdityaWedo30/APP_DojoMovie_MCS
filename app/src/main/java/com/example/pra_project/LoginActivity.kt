@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dojomovie.DatabaseHelper
+import com.example.dojomovie.fetchAndStoreFilms
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         dbHelper = DatabaseHelper(this)
+        fetchAndStoreFilms(this)
 
         phoneEditText = findViewById(R.id.numberPhone)
         passwordEditText = findViewById(R.id.passwordET)
